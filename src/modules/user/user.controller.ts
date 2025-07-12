@@ -12,4 +12,24 @@ export const userController = {
       next(error);
     }
   },
+  getUserById: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = req.params.id;
+
+      if (!id) {
+        res.status(400).json({ error: "ID пользователя не передан" });
+      }
+
+      const user = await prisma.user.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      res.json({ data: user });
+    }
+    catch (error) {
+      next(error);
+    }
+  },
 };
