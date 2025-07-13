@@ -21,11 +21,18 @@ model User {
   fullname String
   birthday DateTime
 
-  role   Role    @default(USER)
-  status Boolean @default(true)
+  role   Role   @default(USER)
+  status Status @default(ACTIVE)
+
+  @@map("user")
 }
 
 enum Role {
   ADMIN
   USER
+}
+
+enum Status {
+  ACTIVE
+  DISABLED
 }
