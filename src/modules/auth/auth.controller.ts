@@ -12,7 +12,8 @@ export const authController = {
 			const existingUser = await prisma.user.findUnique({ where: { email } });
 
 			if (existingUser) {
-				return res.status(400).json({ error: 'Пользователь уже существует' });
+				res.status(400).json({ error: 'Пользователь уже существует' });
+				return;
 			}
 
 			const hashedPassword = await bcrypt.hash(password, 10);
