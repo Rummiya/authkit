@@ -17,3 +17,8 @@ export const registrationSchema = z.object({
 			message: 'Дата рождения должна быть в пределах от 1900 года до сегодня',
 		}),
 });
+
+export const loginSchema = z.object({
+	email: z.email({ message: 'Некорректный email' }),
+	password: z.string().trim().min(1, 'Пароль обязателен'),
+});
