@@ -42,6 +42,11 @@ export const userController = {
 				return;
 			}
 
+			if (existingUser.status === 'DISABLED') {
+				res.status(409).json({ error: 'Пользователь уже деактивирован' });
+				return;
+			}
+
 			const disabledUser = await userService.setStatus(id, 'DISABLED');
 
 			res.json({ data: disabledUser, message: 'Пользователь деактивирован' });
@@ -57,6 +62,11 @@ export const userController = {
 
 			if (!existingUser) {
 				res.status(404).json({ error: 'Пользователь не найден' });
+				return;
+			}
+
+			if (existingUser.status === 'ACTIVE') {
+				res.status(409).json({ error: 'Пользователь уже активен' });
 				return;
 			}
 
