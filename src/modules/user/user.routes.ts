@@ -15,7 +15,12 @@ userRouter.get(
 	authorizeAdmin,
 	userController.getAllUsers
 );
-userRouter.get('/users/:id', authenticate, userController.getUserById);
+userRouter.get(
+	'/users/:id',
+	authenticate,
+	authorizeSelfOrAdmin,
+	userController.getUserById
+);
 userRouter.patch(
 	'/users/ban/:id',
 	authenticate,
