@@ -2,9 +2,9 @@ import type { NextFunction, Request, Response } from 'express';
 
 import jwt from 'jsonwebtoken';
 
-import type { JWTPayload } from '../interfaces/jwt-payload';
+import type { JWTPayload } from '../../interfaces/jwt-payload';
 
-import { prisma } from '../lib/prisma-client';
+import { prisma } from '../../lib/prisma-client';
 
 export async function authenticate(
 	req: Request,
