@@ -1,11 +1,11 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import { prisma } from '../../lib/prisma-client';
+import { userService } from './user.service';
 
 export const userController = {
 	getAllUsers: async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const users = await prisma.user.findMany({});
+			const users = await userService.getAll();
 			res.json({ data: users });
 		} catch (error) {
 			next(error);
@@ -19,11 +19,7 @@ export const userController = {
 				res.status(400).json({ error: 'ID пользователя не передан' });
 			}
 
-			const user = await prisma.user.findUnique({
-				where: {
-					id,
-				},
-			});
+			const user = await userService.getById(id);
 
 			if (!user) {
 				res.status(404).json({ error: 'Пользователь не найден!' });
@@ -39,21 +35,14 @@ export const userController = {
 		try {
 			const id = req.params.id;
 
-			const existingUser = await prisma.user.findUnique({
-				where: { id },
-			});
+			const existingUser = await userService.getById(id);
 
 			if (!existingUser) {
 				res.status(404).json({ error: 'Пользователь не найден' });
 				return;
 			}
 
-			const disabledUser = await prisma.user.update({
-				where: { id },
-				data: {
-					status: 'DISABLED',
-				},
-			});
+			const disabledUser = userService.setStatus(id, 'DISABLED');
 
 			res.json({ data: disabledUser, message: 'Пользователь деактивирован' });
 		} catch (error) {
