@@ -32,6 +32,7 @@ export default antfu(
 			],
 			'test/prefer-lowercase-title': ['off'],
 			'style/no-tabs': 'off',
+			'jsonc/indent': 'off',
 		},
 	}
 );
