@@ -35,4 +35,29 @@ export const userController = {
 			next(error);
 		}
 	},
+	disableUser: async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const id = req.params.id;
+
+			const existingUser = await prisma.user.findUnique({
+				where: { id },
+			});
+
+			if (!existingUser) {
+				res.status(404).json({ error: 'Пользователь не найден' });
+				return;
+			}
+
+			const disabledUser = await prisma.user.update({
+				where: { id },
+				data: {
+					status: 'DISABLED',
+				},
+			});
+
+			res.json({ data: disabledUser, message: 'Пользователь деактивирован' });
+		} catch (error) {
+			next(error);
+		}
+	},
 };
