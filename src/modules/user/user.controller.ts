@@ -42,9 +42,27 @@ export const userController = {
 				return;
 			}
 
-			const disabledUser = userService.setStatus(id, 'DISABLED');
+			const disabledUser = await userService.setStatus(id, 'DISABLED');
 
 			res.json({ data: disabledUser, message: 'Пользователь деактивирован' });
+		} catch (error) {
+			next(error);
+		}
+	},
+	enableUser: async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const id = req.params.id;
+
+			const existingUser = await userService.getById(id);
+
+			if (!existingUser) {
+				res.status(404).json({ error: 'Пользователь не найден' });
+				return;
+			}
+
+			const enabledUser = await userService.setStatus(id, 'ACTIVE');
+
+			res.json({ data: enabledUser, message: 'Пользователь активирован' });
 		} catch (error) {
 			next(error);
 		}
