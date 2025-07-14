@@ -22,3 +22,5 @@ export const loginSchema = z.object({
 	email: z.email({ message: 'Некорректный email' }),
 	password: z.string().trim().min(1, 'Пароль обязателен'),
 });
+
+export type RegisterData = z.infer<typeof registrationSchema>;
