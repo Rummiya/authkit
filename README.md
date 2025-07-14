@@ -60,7 +60,6 @@ REST API для управления пользователями с автор�
 │   │   └── user/            # Пользовательская логика
 │   │       ├── user.controller.ts
 │   │       ├── user.routes.ts
-│   │       ├── user.schema.ts
 │   │       └── user.service.ts
 │   ├── utils/               # Утилиты и вспомогательные функции
 │   ├── app.ts               # Конфигурация приложения
