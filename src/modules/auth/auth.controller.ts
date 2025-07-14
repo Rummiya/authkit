@@ -61,7 +61,7 @@ export const authController = {
 			}
 
 			const token = jwt.sign(
-				{ userId: user.id },
+				{ userId: user.id, role: user.role },
 				process.env.SECRET_KEY || '123'
 			);
 

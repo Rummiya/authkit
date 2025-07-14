@@ -1,7 +1,8 @@
-import type { User } from '@prisma/client';
 import type { NextFunction, Request, Response } from 'express';
 
 import jwt from 'jsonwebtoken';
+
+import type { JWTPayload } from '../interfaces/jwt-payload';
 
 import { prisma } from '../lib/prisma-client';
 
@@ -21,12 +22,12 @@ export async function authenticate(
 	try {
 		const decoded = jwt.verify(
 			token,
-			process.env.SECRET_KEY || 'secret_key'
-		) as User;
+			process.env.SECRET_KEY || '123'
+		) as JWTPayload;
 
 		// Проверка, существует ли пользователь в базе
 		const user = await prisma.user.findUnique({
-			where: { id: decoded.id },
+			where: { id: decoded.userId },
 		});
 
 		if (!user) {
