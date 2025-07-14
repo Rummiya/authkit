@@ -4,13 +4,14 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 import { prisma } from '../../lib/prisma-client';
+import { authService } from './auth.service';
 
 export const authController = {
 	registration: async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const { fullname, email, password, birthday } = req.body;
 
-			const existingUser = await prisma.user.findUnique({ where: { email } });
+			const existingUser = await authService.getByEmail(email);
 
 			if (existingUser) {
 				res.status(400).json({ error: 'Пользователь уже существует' });
@@ -19,13 +20,11 @@ export const authController = {
 
 			const hashedPassword = await bcrypt.hash(password, 10);
 
-			const user = await prisma.user.create({
-				data: {
-					email,
-					password: hashedPassword,
-					birthday,
-					fullname,
-				},
+			const user = await authService.register({
+				email,
+				fullname,
+				birthday,
+				password: hashedPassword,
 			});
 
 			res.json({ data: user, message: 'Вы успешно зарегистрированы!' });
@@ -42,11 +41,7 @@ export const authController = {
 				return;
 			}
 
-			const user = await prisma.user.findUnique({
-				where: {
-					email,
-				},
-			});
+			const user = await authService.getByEmail(email);
 
 			if (!user) {
 				res.status(400).json({ error: 'Неверный логин или пароль' });
