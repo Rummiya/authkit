@@ -1,57 +1,129 @@
-# Express API Starter with Typescript
+# 👤 Authkit API
 
-A JavaScript Express v5 starter template with sensible defaults.
+REST API для управления пользователями с авторизацией, ролями (`admin`, `user`) и поддержкой блокировки/разблокировки аккаунтов.
 
-How to use this template:
+## 🚀 Стек технологий
 
-```sh
-pnpm dlx create-express-api@latest --typescript --directory my-api-name
+- **TypeScript**
+- **Express**
+- **Prisma** + MongoDB
+- **Zod** — для валидации входных данных
+- **JWT + BcryptJS** — для аутентификации
+- **dotenv** — для переменных окружения
+- **ESLint + Prettier** — для форматирования и стиля кода
+- **Vitest** — (опционально) для тестирования
+
+---
+
+## 📚 Основной функционал
+- 🔐 Регистрация и авторизация
+- 🧾 Получение пользователя по ID (с проверкой доступа)
+- 📋 Получение списка всех пользователей (только для админа)
+- 🚫 Блокировка и разблокировка пользователя (сам себя или админ)
+- 🛡️ Middleware'ы для защиты маршрутов
+
+---
+
+## 📡 API маршруты
+
+| Метод | Роут             | Защита        | Описание                          |
+|-------|------------------|---------------|-----------------------------------|
+| POST  | /auth/register   | ❌            | Регистрация                       |
+| POST  | /auth/login      | ❌            | Авторизация                       |
+| GET   | /users/:id       | ✅ auth       | Получение юзера по ID             |
+| GET   | /users           | ✅ admin      | Получить всех пользователей       |
+| PATCH | /users/ban/:id   | ✅ self/admin | Забанить пользователя             |
+| PATCH | /users/unban/:id | ✅ self/admin | Разбанить пользователя            |
+
+---
+
+## 🧭 Архитектура проекта
+
+```
+📦 root
+├── prisma/                    # Prisma ORM: схема и сидер
+│   ├── schema.prisma
+│   └── seed.ts
+│
+├── src/                       # Основной код проекта
+│   ├── interfaces/           # Интерфейсы и типы ответов
+│   ├── lib/                  # Вспомогательные библиотеки (например, prisma client)
+│   ├── middlewares/         # Middleware'ы Express
+│   │   ├── auth/            # Middleware, связанные с авторизацией/доступом
+│   │   └── ...
+│   ├── modules/             # Бизнес-логика (модули: auth, user и т.д.)
+│   │   ├── auth/            # Аутентификация/авторизация
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── auth.routes.ts
+│   │   │   ├── auth.schema.ts
+│   │   │   └── auth.service.ts
+│   │   └── user/            # Пользовательская логика
+│   │       ├── user.controller.ts
+│   │       ├── user.routes.ts
+│   │       ├── user.schema.ts
+│   │       └── user.service.ts
+│   ├── utils/               # Утилиты и вспомогательные функции
+│   ├── app.ts               # Конфигурация приложения
+│   ├── env.ts               # Загрузка переменных окружения
+│   ├── index.ts             # Точка входа
+│   └── router.ts            # Главный роутер
+│
+├── test/                     # Тесты (если будут)
+├── types/                    # Расширения типов Express и общие типы
+├── .env                      # Переменные окружения (локально)
+├── .env.example              # Пример .env файла
+├── .gitignore
+├── .eslint.config.mjs        # Конфигурация форматирования
+├── .package.json							# Список зависимостей
+├── .pnpm-lock.yaml
+├── .README.md
+└── .tsconfig.json            # Конфигурация типизации
 ```
 
-Includes API Server utilities:
+---
 
-- [morgan](https://www.npmjs.com/package/morgan)
-  - HTTP request logger middleware for node.js
-- [helmet](https://www.npmjs.com/package/helmet)
-  - Helmet helps you secure your Express apps by setting various HTTP headers. It's not a silver bullet, but it can help!
-- [cors](https://www.npmjs.com/package/cors)
-  - CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
+## Полезные команды
+- `npx prisma studio` - для просмотра данных в бд
+- `pnpm run seed` - для запуска вспомогательных скриптов
 
-Development utilities:
+---
 
-- [typescript](https://www.npmjs.com/package/typescript)
-  - TypeScript is a language for application-scale JavaScript.
-- [tsx](https://www.npmjs.com/package/tsx)
-  - The easiest way to run TypeScript in Node.js
-- [eslint](https://www.npmjs.com/package/eslint)
-  - ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
-- [vitest](https://www.npmjs.com/package/vitest)
-  - Next generation testing framework powered by Vite.
-- [zod](https://www.npmjs.com/package/zod)
-  - Validated TypeSafe env with zod schema
-- [supertest](https://www.npmjs.com/package/supertest)
-  - HTTP assertions made easy via superagent.
+## 📦 Установка и запуск
 
-## Setup
-
+### 1. Клонируйте репозиторий
+```bash
+git clone https://github.com/your-username/authkit.git
+cd authkit
 ```
+
+### 2. Установите зависимости 
+```bash
 pnpm install
 ```
 
-## Lint
+### 3. Настройте переменные окружения 
+- Переименуйте .env.example на .env
+- Укажите url вашей базы данных в `DATABASE_URL` 
 
-```
-pnpm run lint
+### 4. Запустите сид для создания админа
+> _Со следующими данными:_
+> email: 'admin@admin.com',
+>	fullname: 'Admin',
+>	password: 123456,
+ 
+```bash
+pnpm run seed
 ```
 
-## Test
-
+### 5. Настройте базу данных
+```bash
+npx prisma generate
 ```
-pnpm run test
-```
+_(создаст таблицы и сгенерирует клиент Prisma)_
 
-## Development
-
-```
+### 6. Запуск проекта
+```bash
 pnpm run dev
 ```
+_Проект будет доступен по адресу: http://localhost:3000_
+
