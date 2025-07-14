@@ -73,7 +73,7 @@ REST API для управления пользователями с автор�
 ├── .env.example              # Пример .env файла
 ├── .gitignore
 ├── .eslint.config.mjs        # Конфигурация форматирования
-├── .package.json							      # Список зависимостей
+├── .package.json			  # Список зависимостей
 ├── .pnpm-lock.yaml
 ├── .README.md
 └── .tsconfig.json            # Конфигурация типизации
