@@ -16,11 +16,17 @@ userRouter.get(
 	userController.getAllUsers
 );
 userRouter.get('/users/:id', authenticate, userController.getUserById);
-userRouter.put(
+userRouter.patch(
 	'/users/ban/:id',
 	authenticate,
 	authorizeSelfOrAdmin,
 	userController.disableUser
+);
+userRouter.patch(
+	'/users/unban/:id',
+	authenticate,
+	authorizeSelfOrAdmin,
+	userController.enableUser
 );
 
 export default userRouter;
