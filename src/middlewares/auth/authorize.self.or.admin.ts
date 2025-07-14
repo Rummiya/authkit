@@ -8,8 +8,9 @@ export function authorizeSelfOrAdmin(
 	const userIdFromToken = req.user?.userId;
 	const userIdFromParams = req.params.id;
 
-	if (req.user?.role === 'admin' || userIdFromToken === userIdFromParams) {
+	if (req.user?.role === 'ADMIN' || userIdFromToken === userIdFromParams) {
 		next();
+		return;
 	}
 
 	res.status(403).json({ error: 'У вас недостаточно прав' });
