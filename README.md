@@ -105,9 +105,9 @@ pnpm install
 - Укажите url вашей базы данных в `DATABASE_URL` 
 
 ### 4. Запустите сид для создания админа
-> _Со следующими данными:_
-> email: 'admin@admin.com',
->	fullname: 'Admin',
+> _Со следующими данными:_  
+> email: admin@admin.com,  
+>	fullname: Admin,  
 >	password: 123456,
  
 ```bash
