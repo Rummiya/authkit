@@ -91,7 +91,7 @@ REST API для управления пользователями с автор�
 
 ### 1. Клонируйте репозиторий
 ```bash
-git clone https://github.com/your-username/authkit.git
+git clone https://github.com/Rummiya/authkit.git
 cd authkit
 ```
 
