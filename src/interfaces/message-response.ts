@@ -1,4 +1,4 @@
-type MessageResponse = {
-  message: string;
-};
+interface MessageResponse {
+	message: string;
+}
 export default MessageResponse;
